@@ -9,6 +9,10 @@
  */
 #include <Keypad.h>
 
+#define A 12
+#define B 11
+#define C 10
+#define D 9
 const byte ROWS = 4; //four rows
 const byte COLS = 3; //three columns
 char keys[ROWS][COLS] = {
@@ -33,13 +37,56 @@ void setup(){
     digitalWrite(ledPin, HIGH);           // Turn the LED on.
     ledPin_state = digitalRead(ledPin);   // Store initial LED state. HIGH when LED is on.
     keypad.addEventListener(keypadEvent); // Add an event listener for this keypad
+    pinMode(D, OUTPUT);
+    pinMode(C, OUTPUT);
+    pinMode(B, OUTPUT);
+    pinMode(A, OUTPUT);
 }
 
 void loop(){
     char key = keypad.getKey();
-
     if (key) {
         Serial.println(key);
+        switch(key) {
+          case '0': 
+            pinSet(1, 1, 1, 1);
+            break;
+          case '1':
+            pinSet(0, 0, 0, 1);
+            break;
+          case '2': 
+            pinSet(0, 0, 1, 0);
+            break;
+          case '3':
+            pinSet(0, 0, 1, 1); 
+            break;
+          case '4': 
+            pinSet(0, 1, 0, 0);
+            break;
+          case '5':
+            pinSet(0, 1, 0, 1); 
+            break;
+          case '6': 
+            pinSet(0, 1, 1, 0);
+            break;
+          case '7': 
+            pinSet(0, 1, 1, 1);
+            break;
+          case '8': 
+            pinSet(1, 0, 0, 0);
+            break;
+          case '9': 
+            pinSet(1, 0, 0, 1);
+            break;
+          case '*': 
+            pinSet(1, 0, 1, 0);
+            break;
+          case '#': 
+            pinSet(1, 0, 1, 1);
+            break;
+          default:
+            pinSet(0, 0, 0, 0);
+        }
     }
     if (blink){
         digitalWrite(ledPin,!digitalRead(ledPin));    // Change the ledPin from Hi2Lo or Lo2Hi.
@@ -71,3 +118,26 @@ void keypadEvent(KeypadEvent key){
         break;
     }
 }
+
+void pinSet(int a, int b, int c, int d) {
+  if(a == 1)
+    digitalWrite(A, HIGH);
+   else
+    digitalWrite(A, LOW);
+
+   if(b == 1)
+    digitalWrite(B, HIGH);
+   else
+    digitalWrite(B, LOW);
+
+   if(c == 1)
+    digitalWrite(C, HIGH);
+   else
+    digitalWrite(C, LOW);
+
+   if(d == 1)
+    digitalWrite(D, HIGH);
+   else
+    digitalWrite(D, LOW);
+}
+
