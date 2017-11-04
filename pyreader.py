@@ -2,6 +2,7 @@ import serial
 import time
 import xlwt
 import numpy
+import os
 import paho.mqtt.client as mqtt
 addr  = '/dev/ttyACM0' #bitchy line. Always run /dev to find it.
 baud  = 9600
@@ -14,26 +15,39 @@ def mqttPub(msg):
         CLIENT.connect(brokerAddress)
         CLIENT.loop_start()
         CLIENT.publish("oculus", msg)
-        time.sleep(5)
+        time.sleep(3)
         CLIENT.loop_stop()
+
+def clicker():
+    os.system("raspistill -o image.jpg")
+    f = open("image.jpg", "rb")
+    fc = f.read()
+    byteArr = bytearray(fc)
+    mqttPub(byteArr)
 
 def looper(i):
     if i == '1':
+        os.system("sudo motion")
+        time.sleep(1)
         mqttPub("object")
     if i == '2':
         mqttPub("money")
+        clicker()
     if i == '3':
         mqttPub("faces")
+        clicker()
     if i == '4':
-        mqttPub("light1")
+        mqttPub("lightOn")
     if i == '5':
-        mqttPub("light2")
+        mqttPub("lightOff")
     if i == '6':
         mqttPub("kitchen")
     if i == '7':
         mqttPub("security")
     if i == '8':
         mqttPub("maa ****")
+    if i == '*':
+        os.system("sudo service motion stop")
 
 while x != '#':
     with serial.Serial(addr,baud) as port:
