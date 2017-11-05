@@ -20,10 +20,6 @@ def mqttPub(msg):
 
 def clicker():
     os.system("raspistill -o image.jpg")
-    f = open("image.jpg", "rb")
-    fc = f.read()
-    byteArr = bytearray(fc)
-    mqttPub(byteArr)
 
 def looper(i):
     if i == '1':
@@ -31,11 +27,11 @@ def looper(i):
         time.sleep(1)
         mqttPub("object")
     if i == '2':
+        clicker()
         mqttPub("money")
-        clicker()
     if i == '3':
-        mqttPub("faces")
         clicker()
+        mqttPub("faces")
     if i == '4':
         mqttPub("lightOn")
     if i == '5':
